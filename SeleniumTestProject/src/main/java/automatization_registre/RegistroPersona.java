@@ -1,4 +1,9 @@
 package automatization_registre;
+
+import Entidades.CredencialesUsuario;
+import Entidades.CuentaGoogle;
+import Entidades.Pasaportes;
+import Entidades.Usuario;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,12 +28,24 @@ public class RegistroPersona {
     public static void main(String[] args) {
 
         System.setProperty("webdriver.chrome.driver","src\\main\\resources\\chromedriver\\chromedriver.exe");
-
         WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
 
         // Darle 1 minuto a la sección para entroar elementos si no los encuentra la primea vez
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.MINUTES);
+
+        // Datos del usuario
+        datosUsuario();
+
+        // Generar correo Tempail
+        generarCorreoGeneradoTempail(driver, usuarioRegistro);
+
+        // Loguear el usuario registrado
+        login(driver, usuarioRegistro);
+    }
+
+    // Datos del usuario
+    public static void datosUsuario(){
 
         // Datos personales
         Usuario usuarioRegistro = new Usuario();
@@ -92,13 +109,6 @@ public class RegistroPersona {
         usuarioRegistro.datosAdmision.dificultadRecordar = "No, ninguna dificultad";
         usuarioRegistro.datosAdmision.dificultadTarea = "No, ninguna dificultad";
         usuarioRegistro.datosAdmision.dificultadComunicarse = "No, ninguna dificultad";
-
-        //generarCorreosGmail(3, "Test", "1", "EnEro", "2000", "hombre", "TestQA0000#");
-        generarCorreoGeneradoTempail(driver, usuarioRegistro);
-        login(driver, usuarioRegistro);
-
-        /// Confirmar la solicitud de registro en Gmail
-        //administrarGmail(driver, "ronnydlossantosp@gmail.com","ronny12345");
     }
 
     // Leer pasaportes
@@ -1031,6 +1041,58 @@ public class RegistroPersona {
         }
     }
 
+    // Generar acrchivos json con datos
+    public static void generarArchivoJson(String nombreArchivo, CuentaGoogle cuentaGoogle){
+        Gson json = new Gson();
+
+        File file = new File(nombreArchivo);
+
+        // Verificar, si el archivo no existe que cree uno con los datos
+        if (!file.exists()){
+            try {
+                List<CuentaGoogle> listCuentaGoogle = new ArrayList<>();
+                listCuentaGoogle.add(cuentaGoogle);
+
+                // Convertir a json
+                String datosJson = json.toJson(listCuentaGoogle);
+
+                // Escribir y crear el archivo
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(datosJson);
+                fileWriter.close();
+                file.createNewFile();
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }else {
+            // Leer y reescribir archivo
+            try {
+                // Leer archivo
+                FileReader reader = new FileReader(nombreArchivo);
+
+                // Crear el tipo de objeto del json y comvertir el json a objeto
+                Type tipoJson = new  TypeToken<List<CuentaGoogle>>() {}.getType();
+                List<CuentaGoogle> listCuentas = json.fromJson(reader, tipoJson);
+
+                // Agregar un objeto a la lista
+                listCuentas.add(cuentaGoogle);
+
+                // Comvertir lista de objeto a texto
+                String datosJson = json.toJson(listCuentas);
+
+                // Escribir en el archivo
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(datosJson);
+                fileWriter.close();
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /// ====== NO SE ESTA USUANDO ======
     // Esta funcion logea un usuario en gmail y confirma la solicitud del corre Registro itla
     public static void administrarGmail(WebDriver driver, String gmail, String password){
         String url = "https://accounts.google.com/InteractiveLogin/signinchooser?continue=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&emr=1&followup=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&osid=1&passive=1209600&service=mail&ifkv=ARpgrqdXfDkRktSpu5dPAvhZtZXqVP4nNFmv8GyY8mQLd9sUuGWDazAC3y5DkEh6NiQTsH4dlh9pPw&ddm=0&flowName=GlifWebSignIn&flowEntry=ServiceLogin";
@@ -1061,6 +1123,7 @@ public class RegistroPersona {
         Confirmar.click();
     }
 
+    /// ====== NO SE ESTA USUANDO ======
     // Generar correos de Gmail
     public static void generarCorreosGmail(int cantidadCorreo, String nombreCuenta, String diaCuenta, String mesCuenta, String anioCuenta, String generoPersona, String password){
 
@@ -1195,56 +1258,6 @@ public class RegistroPersona {
 
     }
 
-    // Generar acrchivos json con datos
-    public static void generarArchivoJson(String nombreArchivo, CuentaGoogle cuentaGoogle){
-        Gson json = new Gson();
-
-        File file = new File(nombreArchivo);
-
-        // Verificar, si el archivo no existe que cree uno con los datos
-        if (!file.exists()){
-            try {
-                List<CuentaGoogle> listCuentaGoogle = new ArrayList<>();
-                listCuentaGoogle.add(cuentaGoogle);
-
-                // Convertir a json
-                String datosJson = json.toJson(listCuentaGoogle);
-
-                // Escribir y crear el archivo
-                FileWriter fileWriter = new FileWriter(file);
-                fileWriter.write(datosJson);
-                fileWriter.close();
-                file.createNewFile();
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }else {
-            // Leer y reescribir archivo
-            try {
-                // Leer archivo
-                FileReader reader = new FileReader(nombreArchivo);
-
-                // Crear el tipo de objeto del json y comvertir el json a objeto
-                Type tipoJson = new  TypeToken<List<CuentaGoogle>>() {}.getType();
-                List<CuentaGoogle> listCuentas = json.fromJson(reader, tipoJson);
-
-                // Agregar un objeto a la lista
-                listCuentas.add(cuentaGoogle);
-
-                // Comvertir lista de objeto a texto
-                String datosJson = json.toJson(listCuentas);
-
-                // Escribir en el archivo
-                FileWriter fileWriter = new FileWriter(file);
-                fileWriter.write(datosJson);
-                fileWriter.close();
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 }
 
 

@@ -1,4 +1,4 @@
-package automatization_registre;
+package Entidades;
 
 public class CuentaGoogle {
     String nombre;
