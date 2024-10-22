@@ -8,6 +8,6 @@ public class Usuario {
     public String tipoDocumento;
     public CredencialesLoginSigei credencialesLoginSigei = new CredencialesLoginSigei();
     public DatosAdmision datosAdmision = new DatosAdmision();
-    public Usuario(){}
 
+    public Usuario(){}
 }

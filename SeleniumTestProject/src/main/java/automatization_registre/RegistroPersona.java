@@ -22,12 +22,13 @@ import java.util.concurrent.TimeUnit;
 
 public class RegistroPersona {
 
+    static Usuario usuarioRegistro = new Usuario();
     static List<String> identificadoresVentanas = new ArrayList<>();
     static int milisegundos = 7000;
 
     public static void main(String[] args) {
 
-        System.setProperty("webdriver.chrome.driver","src\\main\\resources\\chromedriver\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
 
@@ -38,17 +39,16 @@ public class RegistroPersona {
         datosUsuario();
 
         // Generar correo Tempail
-        generarCorreoGeneradoTempail(driver, usuarioRegistro);
+        generarCorreoGeneradoTempail(driver, datosUsuario());
 
         // Loguear el usuario registrado
-        login(driver, usuarioRegistro);
+        login(driver, datosUsuario());
     }
 
     // Datos del usuario
-    public static void datosUsuario(){
+    public static Usuario datosUsuario(){
 
         // Datos personales
-        Usuario usuarioRegistro = new Usuario();
         usuarioRegistro.nombre = "Lucas";
         usuarioRegistro.apellido = "Alcantara Soto";
         usuarioRegistro.numeroIdentidad = getPasaporte();
@@ -109,6 +109,8 @@ public class RegistroPersona {
         usuarioRegistro.datosAdmision.dificultadRecordar = "No, ninguna dificultad";
         usuarioRegistro.datosAdmision.dificultadTarea = "No, ninguna dificultad";
         usuarioRegistro.datosAdmision.dificultadComunicarse = "No, ninguna dificultad";
+
+        return usuarioRegistro;
     }
 
     // Leer pasaportes
@@ -353,6 +355,21 @@ public class RegistroPersona {
         WebElement btnAdd = driver.findElement(By.xpath("//*[@id=\"btnAdd\"]"));
         btnAdd.click();
 
+            /// Mensaje de proceso de adminción cocluido
+            try{
+                WebElement admiCulminada = driver.findElement(By.xpath("//*[@id=\"swal2-title\"]"));
+                System.out.println("-----------------------------------------------------------------------------------------------");
+                System.out.println(admiCulminada.getText());
+                System.out.println("-----------------------------------------------------------------------------------------------");
+                System.out.println("\nEjecución finalizada...\n");
+                System.exit(0);
+            } catch (Exception e) {
+                System.out.println("-----------------------------------------------------------------");
+                System.out.println("No se pudo encontrar el mensaje del proceso de admision concluido");
+                System.out.println("-----------------------------------------------------------------");
+                System.out.println("Error: "+e);
+            }
+
         // Seleccionar recinto
         WebElement btnRecinto = driver.findElement(By.xpath("//*[@id=\"mat-mdc-dialog-0\"]/div/div/app-add-admision/div[2]/div/div/div[1]/div[2]/ngx-select-dropdown/div/button"));
         btnRecinto.click();
@@ -581,7 +598,6 @@ public class RegistroPersona {
         List<WebElement> listaInstitucionSecundaria = driver.findElements(By.xpath("//*[@id=\"suggestions\"]/ul/li"));
         int indexInstitucionSecundaria=0;
         for (int i = 0; i<listaInstitucionSecundaria.size(); i++){
-            System.out.println(listaInstitucionSecundaria.get(i).getText());
             if(listaInstitucionSecundaria.get(i).getText().contains(usuario.datosAdmision.instituciónSecundaria)){
                 indexInstitucionSecundaria = i;
             }
