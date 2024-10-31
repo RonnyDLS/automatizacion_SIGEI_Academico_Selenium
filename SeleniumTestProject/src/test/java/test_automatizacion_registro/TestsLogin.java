@@ -24,7 +24,7 @@ public class TestsLogin {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         //driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-        driver.get("https://sigeiacademico.itla.edu.do/account/login");
+        driver.get("https://qasigeiacademico.itla.edu.do/account/login");
     }
 
     // Validar mensaje cuando el usuario no existe
@@ -207,7 +207,7 @@ public class TestsLogin {
 
         // Introducir email (Usuario)
         WebElement usuarioInput = driver.findElement(By.id("email"));
-        usuarioInput.sendKeys("sespesordo@gufum.com");
+        usuarioInput.sendKeys("kutrudarti@gufum.com");
 
         // Introducir contraseña
         WebElement passwordInput = driver.findElement(By.id("password"));
@@ -232,14 +232,14 @@ public class TestsLogin {
     // Cerrar el navegador
     @AfterAll
     public static void finalizar(){
-        int segundos = 5;
+        int segundos = 1;
         try {
             Thread.sleep(segundos+000);
         } catch (Exception e) {
             System.out.println("No se pudo detener el hilo por "+segundos+" segundos");
             System.out.println("Error: "+e);
         }
-        driver.quit();
+        //driver.quit();
     }
 
 }

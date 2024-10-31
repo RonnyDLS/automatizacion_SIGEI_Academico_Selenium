@@ -140,7 +140,7 @@ public class RegistroPersona {
         // Agrear identificador a la lista
         identificadoresVentanas.add(nuevaVentana.getWindowHandle());
 
-        // Click al btn registrar
+        // Click al btn registrate
         WebElement btnRegistrar = nuevaVentana.findElement(By.xpath("//*[@id=\"kt_body\"]/app-root/ng-component/ng-component/form/div/div/div/div/button"));
         btnRegistrar.click();
 
@@ -354,7 +354,7 @@ public class RegistroPersona {
         // Clickear btn Realizar solicitud
         WebElement btnAdd = driver.findElement(By.xpath("//*[@id=\"btnAdd\"]"));
         btnAdd.click();
-
+/*
             /// Mensaje de proceso de adminción cocluido
             try{
                 WebElement admiCulminada = driver.findElement(By.xpath("//*[@id=\"swal2-title\"]"));
@@ -369,7 +369,7 @@ public class RegistroPersona {
                 System.out.println("-----------------------------------------------------------------");
                 System.out.println("Error: "+e);
             }
-
+*/
         // Seleccionar recinto
         WebElement btnRecinto = driver.findElement(By.xpath("//*[@id=\"mat-mdc-dialog-0\"]/div/div/app-add-admision/div[2]/div/div/div[1]/div[2]/ngx-select-dropdown/div/button"));
         btnRecinto.click();
