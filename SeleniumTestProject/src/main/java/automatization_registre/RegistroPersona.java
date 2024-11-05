@@ -778,7 +778,7 @@ public class RegistroPersona {
 
         // -------------- Datos Médicos ----------------
 
-        // Ingreso Mensual
+        // Tipo de Sangre
         WebElement tipoSangre = driver.findElement(By.xpath("//*[@id=\"mat-mdc-dialog-0\"]/div/div/app-add-admision/div[2]/div/div/div[8]/div[2]/ngx-select-dropdown/div/button"));
         tipoSangre.click();
 
